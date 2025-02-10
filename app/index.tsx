@@ -2,14 +2,17 @@ import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesome } from "@expo/vector-icons"; // Using Expo's FontAwesome icons
+import { useRouter } from "expo-router";
+import LoginScreen from "./Login";
+const router = useRouter();
 
 export default function Index() {
   const navigation = useNavigation(); // React Native navigation
 
   const handleStartClick = () => {
-    navigation.navigate("Login"); // Navigate to the Login screen
+    router.push("/Login"); // Navigates to app/login.tsx
   };
-
+ 
   return (
     <View style={styles.container}>
       <View style={styles.content}>
