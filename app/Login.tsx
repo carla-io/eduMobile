@@ -16,7 +16,7 @@ const Login = () => {
 
   const handleSubmit = async () => {
     try {
-      const response = await axios.post("http://localhost:4000/api/auth/login", formData, {
+      const response = await axios.post("http://192.168.100.171:4000/api/auth/login", formData, {
         headers: { "Content-Type": "application/json" },
       });
 
@@ -34,7 +34,7 @@ const Login = () => {
       });
 
       // Navigate to home screen
-      router.push("/");
+      router.push("/Dashboard");
     } catch (error) {
       const errorMessage = error.response?.data?.message || "Login failed! Please try again.";
       Alert.alert("Error", errorMessage);
