@@ -22,13 +22,15 @@ const Dashboard = () => {
       try {
         const response = await axios.post("http://192.168.100.171:4000/api/auth/user", { token });
 
-        const profilePicture = response.data.user.profilePicture;
+        console.log("User data:", response.data.user); // Debug API response
+
+        const profilePicture =
+          response.data.user.profilePicture?.url || "https://via.placeholder.com/100"; // Ensure correct extraction
+
         setUser({
           name: response.data.user.name || "Guest",
           gradeLevel: response.data.user.gradeLevel || "Unknown",
-          profilePicture: typeof profilePicture === "string" && profilePicture.trim() !== "" 
-            ? profilePicture 
-            : "https://via.placeholder.com/100", // Fallback image
+          profilePicture,
         });
       } catch (err) {
         console.error("Error fetching user:", err.response?.data || err);
@@ -52,6 +54,7 @@ const Dashboard = () => {
             <Image
               source={{ uri: user.profilePicture }}
               style={{ width: 100, height: 100, borderRadius: 50, marginBottom: 10 }}
+              onError={(e) => console.log("Error loading image:", e.nativeEvent.error)} // Debug image errors
             />
           ) : (
             <Text>No Profile Image Available</Text>
