@@ -10,6 +10,8 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigation = useNavigation();
+  const apiUrl = "https://backend-6ioq.onrender.com";
+
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -20,7 +22,7 @@ const Dashboard = () => {
         return;
       }
       try {
-        const response = await axios.post("http://192.168.100.171:4000/api/auth/user", { token });
+        const response = await axios.post(`${apiUrl}/api/auth/user`, { token });
 
         console.log("User data:", response.data.user); // Debug API response
 

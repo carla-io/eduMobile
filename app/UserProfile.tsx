@@ -11,6 +11,8 @@ const UserProfile = () => {
   const [error, setError] = useState(null);
   const [profilePictureUrl, setProfilePictureUrl] = useState(null);
   const [newProfilePicture, setNewProfilePicture] = useState(null);
+  const apiUrl = "https://backend-6ioq.onrender.com";
+
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -21,7 +23,7 @@ const UserProfile = () => {
       }
 
       try {
-        const response = await axios.post("http://192.168.100.171:4000/api/auth/user", { token });
+        const response = await axios.post(`${apiUrl}/api/auth/user`, { token });
         setUser(response.data.user);
         setProfilePictureUrl(response.data.user.profilePicture?.url || null);
       } catch (err) {
@@ -70,7 +72,7 @@ const UserProfile = () => {
       }
   
       const response = await axios.put(
-        `http://192.168.100.171:4000/api/auth/update-profile/${user._id}`,
+        `${apiUrl}/api/auth/update-profile/${user._id}`,
         formData,
         {
           headers: {

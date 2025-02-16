@@ -1,130 +1,146 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { FontAwesome } from "@expo/vector-icons"; // Using Expo's FontAwesome icons
+import { FontAwesome5, MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import LoginScreen from "./Login";
-const router = useRouter();
 
-export default function Index() {
-  const navigation = useNavigation(); // React Native navigation
+const Index = () => {
+  const navigation = useNavigation();
+  const router = useRouter();
 
   const handleStartClick = () => {
-    router.push("/Login"); // Navigates to app/login.tsx
+    router.push("/Login")
   };
- 
+
   return (
-    <View style={styles.container}>
-      <View style={styles.content}>
-        <View style={styles.titleContainer}>
-          <FontAwesome name="book" size={60} color="maroon" style={styles.icon} />
-          <View>
-            <Text style={styles.heading}>WELCOME TO</Text>
-            <Text style={styles.subheading}>EDUTRACKER</Text>
+    <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <View style={styles.container}>
+        <View style={styles.headerContainer}>
+          <FontAwesome5 name="book-open" style={styles.icon} />
+          <Text style={styles.title}>Welcome to <Text style={styles.highlight}>EDUTRACKER</Text></Text>
+          <Text style={styles.tagline}>Your Smart Pathway to Success, Plan and Excel!</Text>
+          <Text style={styles.year}>EDUTRACKER @ 2025</Text>
+        </View>
+
+        <View style={styles.featuresContainer}>
+          <View style={styles.featureBox}>
+            <MaterialIcons name="quiz" style={styles.featureIcon} />
+            <Text style={styles.featureTitle}>Take the Quiz</Text>
+            <Text style={styles.featureText}>Be yourself and answer honestly to get the best recommendation for your academic or career path.</Text>
+          </View>
+
+          <View style={styles.featureBox}>
+            <FontAwesome5 name="graduation-cap" style={styles.featureIcon} />
+            <Text style={styles.featureTitle}>Get Your Results</Text>
+            <Text style={styles.featureText}>Discover the SHS strand, college course, or career options that match your interests and skills.</Text>
+          </View>
+
+          <View style={styles.featureBox}>
+            <FontAwesome5 name="laptop" style={styles.featureIcon} />
+            <Text style={styles.featureTitle}>Plan Your Future</Text>
+            <Text style={styles.featureText}>Use your results to explore schools, scholarships, and career opportunities that fit your potential.</Text>
           </View>
         </View>
 
-        <Text style={styles.tagline}>
-          "EduTrack: Your Smart Pathway to Success - Predict, Plan, and Excel!"
-        </Text>
-
-        <View style={styles.buttonContainer}>
-          <FontAwesome name="user" size={30} color="white" style={styles.userIcon} />
-          <TouchableOpacity style={styles.button} onPress={handleStartClick}>
-            <Text style={styles.buttonText}>START</Text>
-          </TouchableOpacity>
-        </View>
-
-        <Text style={styles.journeyText}>Start Your Journey now!</Text>
+        <TouchableOpacity style={styles.startButton} onPress={handleStartClick}>
+          <Text style={styles.startButtonText}>Start Your Journey!</Text>
+        </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   );
-}
+};
 
 const styles = StyleSheet.create({
+  scrollContainer: {
+    flexGrow: 1,
+  },
   container: {
     flex: 1,
+    alignItems: "center",
     backgroundColor: "white",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 10,
-  },
-  content: {
-    maxWidth: 700,
     padding: 20,
-    alignItems: "center",
   },
-  titleContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+  headerContainer: {
+    flex: 1,
     justifyContent: "center",
-    gap: 10, // Adjusted spacing
-    marginBottom: 10,
+    alignItems: "center",
+    height: "100%",
   },
   icon: {
     fontSize: 80,
     color: "maroon",
   },
-  heading: {
-    fontSize: 30, // Adjusted for mobile screens
+  title: {
+    fontSize: 28,
     fontWeight: "bold",
-    letterSpacing: 1,
-    marginBottom: 1,
-    color: "maroon",
     textAlign: "center",
   },
-  subheading: {
-    fontSize: 35,
-    fontWeight: "bold",
-    letterSpacing: 1,
+  highlight: {
     color: "maroon",
-    textAlign: "left",
+    fontWeight: "bold",
   },
   tagline: {
-    marginTop: 20,
-    fontStyle: "italic",
     fontSize: 18,
-    textAlign: "center",
-    lineHeight: 25,
+    fontStyle: "italic",
+    marginTop: 10,
     color: "maroon",
-    textShadowColor: "rgba(0, 0, 0, 0.3)",
-    textShadowOffset: { width: 1, height: 1 },
-    textShadowRadius: 4,
   },
-  buttonContainer: {
-    marginTop: 24,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 15, // Adjusted spacing
+  year: {
+    fontSize: 12,
+    fontWeight: "bold",
+    marginTop: 10,
   },
-  button: {
-    width: 200,
-    paddingVertical: 14,
-    backgroundColor: "#D32F2F",
-    borderRadius: 6,
+  featuresContainer: {
+    flexDirection: "column",
     alignItems: "center",
-    justifyContent: "center",
+    marginVertical: 20,
+  },
+  featureBox: {
+    backgroundColor: "white",
+    padding: 20,
+    width: "90%",
+    borderRadius: 10,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
+    shadowOpacity: 0.2,
     shadowRadius: 8,
-    elevation: 5, // For Android shadow
+    alignItems: "center",
+    marginBottom: 20,
   },
-  buttonText: {
+  featureIcon: {
+    fontSize: 50,
+    color: "black",
+  },
+  featureTitle: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "white",
-  },
-  userIcon: {
-    fontSize: 40,
-    color: "maroon",
-  },
-  journeyText: {
-    marginTop: 20,
-    fontSize: 16,
-    fontWeight: "500",
+    marginTop: 10,
     textAlign: "center",
-    color: "maroon",
+  },
+  featureText: {
+    fontSize: 14,
+    marginTop: 10,
+    textAlign: "center",
+    color: "#333",
+    lineHeight: 20,
+  },
+  startButton: {
+  
+    paddingVertical: 14,
+    paddingHorizontal: 24,
+    backgroundColor: "maroon",
+    borderRadius: 8,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+  },
+  startButtonText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
+    textAlign: "center",
   },
 });
+
+export default Index;
