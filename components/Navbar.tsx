@@ -55,7 +55,7 @@ const Navbar = () => {
           <TouchableOpacity style={styles.navItem} onPress={() => router.push("/Dashboard")}>
             <Text style={styles.navLink}>Home</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.navItem} onPress={() => router.push("/about")}>
+          <TouchableOpacity style={styles.navItem} onPress={() => router.push("/About")}>
             <Text style={styles.navLink}>About</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.navItem} onPress={() => router.push("/UserProfile")}>
