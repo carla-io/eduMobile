@@ -1,9 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Image, Button, ScrollView, ActivityIndicator, Alert } from "react-native";
+import { View, Text, Image, Button, ScrollView, ActivityIndicator, Alert, TouchableOpacity } from "react-native";
 import { BarChart } from "react-native-chart-kit";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
+
+const portalImg = require("./assets/portal.png");
+const uploadImg = require("./assets/upload.png");
+const certificateImg = require("./assets/certificate.png");
+const personalImg = require("./assets/personal.png");
+const examImg = require("./assets/exam.png");
+import { router } from "expo-router";
 
 const Dashboard = () => {
   const [user, setUser] = useState({ name: "", gradeLevel: "", profilePicture: "" });
@@ -11,7 +18,6 @@ const Dashboard = () => {
   const [error, setError] = useState(null);
   const navigation = useNavigation();
   const apiUrl = "https://backend-6ioq.onrender.com";
-
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -24,10 +30,10 @@ const Dashboard = () => {
       try {
         const response = await axios.post(`${apiUrl}/api/auth/user`, { token });
 
-        console.log("User data:", response.data.user); // Debug API response
+        console.log("User data:", response.data.user);
 
         const profilePicture =
-          response.data.user.profilePicture?.url || "https://via.placeholder.com/100"; // Ensure correct extraction
+          response.data.user.profilePicture?.url || "https://via.placeholder.com/100";
 
         setUser({
           name: response.data.user.name || "Guest",
@@ -56,7 +62,7 @@ const Dashboard = () => {
             <Image
               source={{ uri: user.profilePicture }}
               style={{ width: 100, height: 100, borderRadius: 50, marginBottom: 10 }}
-              onError={(e) => console.log("Error loading image:", e.nativeEvent.error)} // Debug image errors
+              onError={(e) => console.log("Error loading image:", e.nativeEvent.error)}
             />
           ) : (
             <Text>No Profile Image Available</Text>
@@ -91,7 +97,31 @@ const Dashboard = () => {
         </Text>
       )}
 
-      <Button title="View Result" onPress={() => navigation.navigate("Results")} color="#800000" />
+      <Button title="View Result" onPress={() => router.push("/Results")} color="#800000" />
+
+      <View style={{ marginTop: 20 }}>
+        <Text style={{ fontSize: 22, fontWeight: "bold", textAlign: "center", marginBottom: 10 }}>Instructions</Text>
+        <View>
+          {[ 
+            { img: portalImg, text: "To start predicting your future strand, course, or career, the first step is to select the appropriate portal based on your educational level." },
+            { img: uploadImg, text: "Once you've selected the right portal, the next step is to upload a clear picture or file of your current grades in PNG, JPG, JPEG, or PDF." },
+            { img: certificateImg, text: "After uploading your grades, submit any seminar or school-related certificates (max 10 uploads) in JPEG, JPG, or PNG." },
+            { img: personalImg, text: "Following this, you will answer personal questions designed to influence your decision-making in choosing the right strand, course, or career." },
+            { img: examImg, text: "Finally, to ensure a comprehensive evaluation, you will take subject-based exams that assess your knowledge and skills." }
+          ].map((item, index) => (
+            <View key={index} style={{ alignItems: "center", marginBottom: 15 }}>
+              <Image source={item.img} style={{ width: 80, height: 80, marginBottom: 5 }} />
+              <Text style={{ textAlign: "center" }}>{item.text}</Text>
+            </View>
+          ))}
+        </View>
+        <TouchableOpacity
+          style={{ backgroundColor: "#800000", padding: 10, borderRadius: 5, alignItems: "center", marginTop: 10 , marginBottom:30}}
+          onPress={() =>router.push("Portal")}
+        >
+          <Text style={{ color: "#fff", fontSize: 16 }}>Start the Process</Text>
+        </TouchableOpacity>
+      </View>
     </ScrollView>
   );
 };
