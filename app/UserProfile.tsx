@@ -11,7 +11,7 @@ const UserProfile = () => {
   const [error, setError] = useState(null);
   const [profilePictureUrl, setProfilePictureUrl] = useState(null);
   const [newProfilePicture, setNewProfilePicture] = useState(null);
-  const apiUrl = "https://backend-6ioq.onrender.com";
+  const apiUrl = "http://192.168.175.237:4000";
 
 
   useEffect(() => {

@@ -99,7 +99,7 @@ const Register = () => {
 
     try {
       const response = await axios.post(
-        `https://backend-6ioq.onrender.com/api/auth/register`,
+        `http://192.168.175.237:4000/api/auth/register`,
         data,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
