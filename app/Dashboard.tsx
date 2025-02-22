@@ -17,7 +17,7 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigation = useNavigation();
-  const apiUrl = "http://192.168.175.237:4000";
+  const apiUrl = "http://192.168.100.171:4000";
 
   useEffect(() => {
     const fetchUserProfile = async () => {
