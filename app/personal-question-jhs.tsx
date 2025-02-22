@@ -142,6 +142,10 @@ const PQ = () => {
   }, [answers]);
 
   const handleNext = () => {
+    if (!answers[questions[currentQuestionIndex].name]) {
+      Alert.alert("Please answer the question before proceeding.");
+      return;
+    }
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
@@ -185,7 +189,7 @@ const PQ = () => {
       ) : (
         <View>
           <Text style={{ fontSize: 20, fontWeight: "bold", marginBottom: 10 }}>
-            {questions[currentQuestionIndex].text}
+            {currentQuestionIndex + 1}. {questions[currentQuestionIndex].text}
           </Text>
           <ScrollView>
             {questions[currentQuestionIndex].options.map((option, index) => (

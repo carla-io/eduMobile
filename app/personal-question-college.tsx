@@ -121,6 +121,8 @@ const PQ = () => {
   }, [answers]);
 
   const handleNext = () => {
+    if (!answers[questions[currentQuestionIndex].name]) return; // Require answer
+    
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
@@ -159,7 +161,7 @@ const PQ = () => {
         </View>
       ) : (
         <View>
-          <Text style={{ fontSize: 20, fontWeight: "bold" }}>{questions[currentQuestionIndex].text}</Text>
+          <Text style={{ fontSize: 20, fontWeight: "bold" }}>{`${currentQuestionIndex + 1}. ${questions[currentQuestionIndex].text}`}</Text>
           <FlatList
             data={questions[currentQuestionIndex].options}
             keyExtractor={(item) => item}
@@ -175,7 +177,7 @@ const PQ = () => {
             <TouchableOpacity onPress={handleBack} disabled={currentQuestionIndex === 0} style={{ padding: 10, backgroundColor: currentQuestionIndex === 0 ? "#aaa" : "red", borderRadius: 5, marginRight: 10 }}>
               <Text style={{ color: "white" }}>❮❮</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={handleNext} style={{ padding: 10, backgroundColor: "green", borderRadius: 5 }}>
+            <TouchableOpacity onPress={handleNext} disabled={!answers[questions[currentQuestionIndex].name]} style={{ padding: 10, backgroundColor: answers[questions[currentQuestionIndex].name] ? "green" : "#aaa", borderRadius: 5 }}>
               <Text style={{ color: "white" }}>{currentQuestionIndex < questions.length - 1 ? "❯❯" : "Finish 🎉"}</Text>
             </TouchableOpacity>
           </View>

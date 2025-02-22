@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, FlatList } from "react-native";
+import { View, Text, TouchableOpacity, ScrollView, Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import shsQuiz from "./shsquiz.json";
 import collegeQuiz from "./collegequiz.json";
@@ -9,22 +9,32 @@ const Exam = () => {
   const [gradeLevel, setGradeLevel] = useState("");
   const [quizData, setQuizData] = useState({});
   const [answers, setAnswers] = useState({});
-
+  const [scores, setScores] = useState({});
+  
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const storedUser = await AsyncStorage.getItem("user");
         if (storedUser) {
           const parsedUser = JSON.parse(storedUser);
-          setGradeLevel(parsedUser.gradeLevel || "");
-
+          const gradeLevel = parsedUser.gradeLevel || "";
+          setGradeLevel(gradeLevel);
+          
           let selectedQuiz = {};
-          if (parsedUser.gradeLevel === "Junior High School") {
-            selectedQuiz = shsQuiz;
-          } else if (parsedUser.gradeLevel === "Senior High School") {
-            selectedQuiz = collegeQuiz;
-          } else if (parsedUser.gradeLevel === "College") {
-            selectedQuiz = careerQuiz;
+          switch (gradeLevel.trim().toLowerCase()) {
+            case "jhs":
+            case "junior high school":
+              selectedQuiz = shsQuiz;
+              break;
+            case "shs":
+            case "senior high school":
+              selectedQuiz = collegeQuiz;
+              break;
+            case "college":
+              selectedQuiz = careerQuiz;
+              break;
+            default:
+              selectedQuiz = {};
           }
           setQuizData(selectedQuiz);
         }
@@ -32,7 +42,6 @@ const Exam = () => {
         console.error("Error retrieving user data:", error);
       }
     };
-
     fetchUserData();
   }, []);
 
@@ -46,49 +55,95 @@ const Exam = () => {
     }));
   };
 
+  const handleFinishExam = () => {
+    let newScores = {};
+    let totalScore = 0;
+    let totalQuestions = 0;
+    
+    Object.entries(quizData).forEach(([section, sectionData]) => {
+      if (Array.isArray(sectionData.quiz)) {
+        const sectionTotalQuestions = sectionData.quiz.length;
+        const sectionCorrectAnswers = sectionData.quiz.filter(
+          (q) => answers[section]?.[q.question] === q.answer
+        ).length;
+        
+        newScores[section] = {
+          correct: sectionCorrectAnswers,
+          total: sectionTotalQuestions,
+          percentage: ((sectionCorrectAnswers / sectionTotalQuestions) * 100).toFixed(2) + "%"
+        };
+
+        totalScore += sectionCorrectAnswers;
+        totalQuestions += sectionTotalQuestions;
+      }
+    });
+    
+    if (totalQuestions > 0) {
+      newScores["Overall"] = {
+        correct: totalScore,
+        total: totalQuestions,
+        percentage: ((totalScore / totalQuestions) * 100).toFixed(2) + "%"
+      };
+    }
+    
+    setScores(newScores);
+    Alert.alert("Exam Completed", "Your answers have been submitted.");
+  };
+
   return (
-    <View style={{ padding: 20 }}>
-      <Text style={{ fontSize: 24, fontWeight: "bold", marginBottom: 10 }}>
+    <ScrollView style={{ flex: 1, padding: 20 }}>
+      <Text style={{ fontSize: 24, fontWeight: "bold", marginBottom: 10, textAlign: "center" }}>
         Welcome to Your {gradeLevel} Exam
       </Text>
       {Object.keys(quizData).length > 0 ? (
         Object.entries(quizData).map(([section, sectionData], sectionIndex) => (
           <View key={sectionIndex} style={{ marginBottom: 20 }}>
-            <Text style={{ fontSize: 20, fontWeight: "bold" }}>{section}</Text>
-            <FlatList
-              data={sectionData.quiz || []}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={({ item: q, index }) => (
-                <View style={{ marginBottom: 10 }}>
-                  <Text style={{ fontSize: 16 }}>
-                    {index + 1}. {q.question}
-                  </Text>
-                  {q.options?.map((option, optIndex) => (
+            <Text style={{ fontSize: 20, fontWeight: "bold", marginBottom: 10 }}>{section}</Text>
+            {Array.isArray(sectionData.quiz) ? (
+              sectionData.quiz.map((q, index) => (
+                <View key={index} style={{ marginBottom: 10, padding: 10, backgroundColor: "#f9f9f9", borderRadius: 10 }}>
+                  <Text style={{ fontSize: 16, marginBottom: 5 }}>{index + 1}. {q.question}</Text>
+                  {(q.options || q.choices)?.map((option, optIndex) => (
                     <TouchableOpacity
                       key={optIndex}
                       style={{
                         padding: 10,
                         marginVertical: 5,
-                        backgroundColor:
-                          answers[section]?.[q.question] === option
-                            ? "#4CAF50"
-                            : "#f0f0f0",
+                        backgroundColor: answers[section]?.[q.question] === option ? "maroon" : "lightgray",
                         borderRadius: 5,
                       }}
                       onPress={() => handleAnswerChange(section, q.question, option)}
                     >
-                      <Text>{option}</Text>
+                      <Text style={{ color: "white" }}>{option}</Text>
                     </TouchableOpacity>
                   ))}
                 </View>
-              )}
-            />
+              ))
+            ) : (
+              <Text>No questions available for this section.</Text>
+            )}
           </View>
         ))
       ) : (
-        <Text>No quiz available for your grade level.</Text>
+        <Text style={{ textAlign: "center", marginTop: 20 }}>No quiz available for your grade level.</Text>
       )}
-    </View>
+      <TouchableOpacity
+        style={{ backgroundColor: "blue", padding: 15, borderRadius: 10, marginTop: 20, alignItems: "center" }}
+        onPress={handleFinishExam}
+      >
+        <Text style={{ color: "white", fontSize: 18 }}>Finish Exam</Text>
+      </TouchableOpacity>
+      {Object.keys(scores).length > 0 && (
+        <View style={{ marginTop: 20 }}>
+          <Text style={{ fontSize: 20, fontWeight: "bold", textAlign: "center", marginBottom: 10 }}>Exam Scores</Text>
+          {Object.entries(scores).map(([section, score], index) => (
+            <Text key={index} style={{ fontSize: 18, textAlign: "center" }}>
+              {section}: {score.correct} / {score.total} ({score.percentage})
+            </Text>
+          ))}
+        </View>
+      )}
+    </ScrollView>
   );
 };
 
