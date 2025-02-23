@@ -63,7 +63,7 @@ const LoginPage = () => {
 
       // Navigate to appropriate dashboard
       if (user.role === "admin") {
-        router.push("/AdminDashboard");
+        router.push("/admin/AdminDashboard");
       } else {
         router.push("/Dashboard");
       }
