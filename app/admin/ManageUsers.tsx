@@ -10,7 +10,7 @@ const ManageUsers = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get("http://192.168.100.171:4000/api/auth/get-all-users");
+        const response = await axios.get("http://192.168.85.237:4000/api/auth/get-all-users");
         setUsers(response.data);
       } catch (error) {
         console.error("Error fetching users:", error);
@@ -23,7 +23,7 @@ const ManageUsers = () => {
 
   const deleteUser = async (id) => {
     try {
-      await axios.delete(`http://192.168.100.171:4000/api/auth/delete-user/${id}`);
+      await axios.delete(`http://192.168.85.237:4000/api/auth/delete-user/${id}`);
       setUsers(users.filter((user) => user._id !== id));
       Toast.show({ type: "success", text1: "User deleted successfully." });
     } catch (error) {

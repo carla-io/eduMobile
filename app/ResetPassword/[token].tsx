@@ -38,7 +38,7 @@ const ResetPassword = () => {
     }
 
     try {
-      await axios.post(`https://192.168.175.237:4000/api/auth/reset-password/${token}`, { newPassword });
+      await axios.post(`http://192.168.85.237:4000/api/auth/reset-password/${token}`, { newPassword });
       Toast.show({ type: "success", text1: "Password reset successful!" });
 
       setTimeout(() => router.push("/Login"), 3000);

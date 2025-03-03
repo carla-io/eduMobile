@@ -25,7 +25,7 @@ const AdminDashboard = () => {
 
     const fetchRegistrationData = async () => {
         try {
-          const response = await axios.get("http://192.168.100.171:4000/api/auth/registrations-over-time");
+          const response = await axios.get("http://192.168.85.237:4000/api/auth/registrations-over-time");
       
           // Debugging: Log API response
           console.log("Fetched Data:", response.data);
@@ -45,7 +45,7 @@ const AdminDashboard = () => {
     const fetchGradeLevelData = async () => {
       try {
         const response = await axios.get(
-          "http://192.168.100.171:4000/api/auth/grade-level-distribution"
+          "http://192.168.85.237:4000/api/auth/grade-level-distribution"
         );
         const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#790000"];
         const formattedData = response.data.data.map((item, index) => ({
